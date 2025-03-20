@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_winlinux_1/data/trip_data.dart';
 import 'package:flutter_winlinux_1/widgets/shimmer_loader.dart';
-import 'package:flutter_winlinux_1/widgets/trip_card2.dart';
+import 'package:flutter_winlinux_1/widgets/trip_card.dart';
 
 class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});
