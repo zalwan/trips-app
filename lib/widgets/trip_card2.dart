@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_winlinux_1/screens/trip_detail_screen.dart';
 import 'package:flutter_winlinux_1/widgets/shimmer_loader.dart';
 import '../models/trip_model.dart';
 
@@ -101,7 +102,14 @@ class TripCard extends StatelessWidget {
                       ],
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TripDetailsScreen(trip: trip),
+                          ),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue[700],
                         foregroundColor: Colors.white,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_winlinux_1/screens/main_screen.dart';
-import 'screens/trip_list_page.dart';
 
 void main() {
   runApp(const TripApp());
