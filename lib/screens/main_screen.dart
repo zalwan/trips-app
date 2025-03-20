@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_winlinux_1/data/trip_data.dart';
+import 'package:flutter_winlinux_1/widgets/shimmer_loader.dart';
 import 'package:flutter_winlinux_1/widgets/trip_card2.dart';
 
 class MainNavigationPage extends StatefulWidget {
@@ -65,7 +66,11 @@ class HomeScreen extends StatelessWidget {
       body: NestedScrollView(
         headerSliverBuilder:
             (context, innerBoxIsScrolled) => [
-              SliverToBoxAdapter(child: _buildHeroSection()),
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [_buildHeroSection(), _buildCategoryIcons()],
+                ),
+              ),
             ],
         body: _buildTripList(),
       ),
@@ -95,11 +100,26 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
           child: CircleAvatar(
             radius: 18,
-            backgroundImage: const NetworkImage(
-              'https://play-lh.googleusercontent.com/7Ak4Ye7wNUtheIvSKnVgGL_OIZWjGPZNV6TP_3XLxHC-sDHLSE45aDg41dFNmL5COA',
+            backgroundColor:
+                Colors.grey[300], // Warna background untuk efek shimmer
+            child: ClipOval(
+              child: Image.network(
+                'https://play-lh.googleusercontent.com/7Ak4Ye7wNUtheIvSKnVgGL_OIZWjGPZNV6TP_3XLxHC-sDHLSE45aDg41dFNmL5COA',
+                width: 36,
+                height: 36,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return ShimmerLoader(height: 36, width: 36);
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.person, size: 36, color: Colors.grey);
+                },
+              ),
             ),
           ),
         ),
+
         const SizedBox(width: 10),
       ],
     );
@@ -118,7 +138,7 @@ class HomeScreen extends StatelessWidget {
             ),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.2),
+              Colors.black.withValues(alpha: .2),
               BlendMode.darken,
             ),
           ),
@@ -157,7 +177,7 @@ class HomeScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.8),
+        color: Colors.white.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -174,6 +194,43 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildCategoryIcons() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildCategoryItem(Icons.flight, "Flights", Colors.blue.shade50),
+          _buildCategoryItem(Icons.hotel, "Hotels", Colors.blue.shade50),
+          _buildCategoryItem(Icons.directions_car, "Cars", Colors.blue.shade50),
+          _buildCategoryItem(
+            Icons.local_activity,
+            "Activities",
+            Colors.blue.shade50,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryItem(IconData icon, String label, Color bgColor) {
+    return Column(
+      children: [
+        Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
+          child: Icon(icon, color: Colors.blue, size: 28),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+        ),
+      ],
     );
   }
 
