@@ -16,9 +16,7 @@ class TripCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           FutureBuilder(
-            future: Future.delayed(
-              const Duration(milliseconds: 1500),
-            ), // Delay 2 detik
+            future: Future.delayed(const Duration(milliseconds: 1500)),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return ShimmerLoader(height: 180, width: double.infinity);
@@ -116,21 +114,15 @@ class TripCard extends StatelessWidget {
                             ) {
                               const begin = Offset(1.0, 0.0);
                               const end = Offset.zero;
-                              const curve = Curves.easeInOutCubic;
+                              const curve = Curves.easeOutExpo;
 
-                              var tween = Tween(
+                              var offsetTween = Tween(
                                 begin: begin,
                                 end: end,
                               ).chain(CurveTween(curve: curve));
-
-                              var offsetAnimation = animation.drive(tween);
-
                               return SlideTransition(
-                                position: offsetAnimation,
-                                child: FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                ),
+                                position: animation.drive(offsetTween),
+                                child: child,
                               );
                             },
                             transitionDuration: const Duration(
