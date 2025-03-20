@@ -2,9 +2,56 @@ import 'package:flutter/material.dart';
 import '../data/trip_data.dart';
 import '../widgets/trip_card2.dart';
 
-class TripListPage extends StatelessWidget {
+class TripListPage extends StatefulWidget {
   const TripListPage({super.key});
 
+  @override
+  _TripListPageState createState() => _TripListPageState();
+}
+
+class _TripListPageState extends State<TripListPage> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    TripListView(), // Halaman utama (Daftar Trip)
+    FavoritesPage(),
+    ProfilePage(),
+  ];
+
+  void _onTabSelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(index: _selectedIndex, children: _pages),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onTabSelected,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border),
+            label: 'Favorites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// 🔹 Halaman Daftar Trip dengan AppBar
+class TripListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,9 +62,7 @@ class TripListPage extends StatelessWidget {
             fontSize: 24,
             fontFamily: 'Playfair Display',
             fontWeight: FontWeight.w700,
-            // letterSpacing: 1.2,
             color: Colors.black,
-            // color: Theme.of(context).primaryColor,
           ),
         ),
         actions: [
@@ -34,7 +79,6 @@ class TripListPage extends StatelessWidget {
               backgroundImage: NetworkImage(
                 'https://play-lh.googleusercontent.com/7Ak4Ye7wNUtheIvSKnVgGL_OIZWjGPZNV6TP_3XLxHC-sDHLSE45aDg41dFNmL5COA',
               ),
-              // Using ui-avatars.com to generate placeholder avatar
             ),
           ),
           const SizedBox(width: 10),
@@ -118,14 +162,59 @@ class TripListPage extends StatelessWidget {
             ),
           ];
         },
-        body: ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          itemCount: trips.length,
-          itemBuilder: (context, index) {
-            return TripCard(trip: trips[index]);
-          },
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              child: Text(
+                "Popular Destinations",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 4,
+                ),
+                itemCount: trips.length,
+                itemBuilder: (context, index) {
+                  return TripCard(trip: trips[index]);
+                },
+              ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+}
+
+// 🔹 Halaman Favorites dengan AppBar
+class FavoritesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Favorites")),
+      body: Center(
+        child: Text("No favorites yet!", style: TextStyle(fontSize: 20)),
+      ),
+    );
+  }
+}
+
+// 🔹 Halaman Profile dengan AppBar
+class ProfilePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Profile")),
+      body: Center(child: Text("User Profile", style: TextStyle(fontSize: 20))),
     );
   }
 }

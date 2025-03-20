@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_winlinux_1/widgets/shimmer_loader.dart';
 import '../models/trip_model.dart';
 
 class TripCard extends StatelessWidget {
@@ -13,11 +14,28 @@ class TripCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Image.network(
-            trip.photo,
-            height: 180,
-            width: double.infinity,
-            fit: BoxFit.cover,
+          FutureBuilder(
+            future: Future.delayed(
+              const Duration(milliseconds: 1500),
+            ), // Delay 2 detik
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return ShimmerLoader(height: 180, width: double.infinity);
+              }
+              return Image.network(
+                trip.photo,
+                height: 180,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return ShimmerLoader(height: 180, width: double.infinity);
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.image_not_supported, size: 80);
+                },
+              );
+            },
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 15, 15, 10),

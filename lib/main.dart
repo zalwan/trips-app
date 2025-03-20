@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_winlinux_1/screens/main_screen.dart';
 import 'screens/trip_list_page.dart';
 
 void main() {
@@ -13,8 +14,7 @@ class TripApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Wizh Trip App',
-      theme: ThemeData(),
-      home: const TripListPage(),
+      home: const MainNavigationPage(),
     );
   }
 }
